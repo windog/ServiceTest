@@ -6,6 +6,7 @@ import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
@@ -18,6 +19,8 @@ public class MainActivity extends AppCompatActivity {
     Button bindService;
     Button unbindtService;
     private MyService.DownloadBinder downloadBinder;
+    Button mintentService;
+
 
     /* ServiceConnection 去找 Service 中的 binder ,与service取得关联
     *  必须是个全局变量 global variable  */
@@ -44,11 +47,12 @@ public class MainActivity extends AppCompatActivity {
         stopservices = (Button) findViewById(R.id.stop_Service);
         bindService = (Button) findViewById(R.id.bindService);
         unbindtService = (Button) findViewById(R.id.unbindService);
+        mintentService = (Button) findViewById(R.id.btn_StartIntentService);
 
         startservices.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent  = new Intent(MainActivity.this, MyService.class);
+                Intent intent = new Intent(MainActivity.this, MyService.class);
                 startService(intent);
             }
         });
@@ -56,7 +60,7 @@ public class MainActivity extends AppCompatActivity {
         stopservices.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent  = new Intent(MainActivity.this, MyService.class);
+                Intent intent = new Intent(MainActivity.this, MyService.class);
                 stopService(intent);
             }
         });
@@ -64,8 +68,8 @@ public class MainActivity extends AppCompatActivity {
         bindService.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this,MyService.class);
-                bindService(intent,connection,BIND_AUTO_CREATE);
+                Intent intent = new Intent(MainActivity.this, MyService.class);
+                bindService(intent, connection, BIND_AUTO_CREATE);
             }
         });
 
@@ -73,6 +77,15 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 unbindService(connection);
+            }
+        });
+
+        mintentService.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d("MainActivity", "id is" + Thread.currentThread().getId());
+                Intent intent = new Intent(MainActivity.this, MyIntentService.class);
+                startService(intent);
             }
         });
     }
